@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCC Actividades — Informar actividad</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/forms.css">
+</head>
+<body data-pagina="actividades">
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Área Calidad de Vida DCC</span>
+        <span class="brand-subtitle">Gestión de actividades</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="registro.html">Registrar miembro</a>
+        <a href="actividades.html" class="activo">Informar actividad</a>
+        <a href="miembros.html">Ver miembros</a>
+        <a href="metricas.html">Métricas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+    <section aria-labelledby="titulo-actividad">
+      <h1 class="page-title" id="titulo-actividad">Informar actividad</h1>
+
+      <div id="aviso-sin-miembros" class="alerta alerta-info" style="display:none;">
+        No hay miembros registrados aún.
+        <a href="registro.html">Regístra uno primero</a> para poder informar actividades.
+      </div>
+
+      <div id="mensaje-estado" class="alerta" style="display:none;" role="status"></div>
+
+      <form id="form-actividad" novalidate>
+
+        <fieldset>
+          <legend>Miembro que informa</legend>
+          <div class="campo">
+            <label for="miembro-selector">
+              Miembro
+              <span class="obligatorio">*</span>
+            </label>
+            <select id="miembro-selector" name="miembro-id">
+              <option value="">— Seleccione un miembro —</option>
+            </select>
+          </div>
+          <p class="descripcion-seccion">
+            Cada miembro puede registrar un máximo de 10 actividades.
+          </p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Datos de la actividad</legend>
+
+          <div class="campos-dobles">
+            <div class="campo">
+              <label for="titulo-actividad-input">
+                Título de la actividad
+                <span class="obligatorio">*</span>
+              </label>
+              <input type="text" id="titulo-actividad-input" name="titulo"
+                     placeholder="Ej: Taller de fotografía urbana">
+            </div>
+
+            <div class="campo">
+              <label for="categoria">
+                Categoría
+                <span class="obligatorio">*</span>
+              </label>
+              <select id="categoria" name="categoria">
+                <option value="">— Seleccione —</option>
+                <option value="artistica">Artística</option>
+                <option value="deportiva">Deportiva</option>
+                <option value="tecnologica">Tecnológica</option>
+                <option value="social">Social</option>
+                <option value="recreativa">Recreativa</option>
+                <option value="otra">Otra</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="descripcion">
+              Descripción
+              <span class="obligatorio">*</span>
+              <span class="opcional">(mínimo 20 caracteres)</span>
+            </label>
+            <textarea id="descripcion" name="descripcion" rows="4"
+                      placeholder="Describe la actividad, sus objetivos y cómo participas…"></textarea>
+          </div>
+
+          <div class="campo">
+            <label for="lugar">
+              Lugar / Ubicación
+              <span class="opcional">(opcional)</span>
+            </label>
+            <input type="text" id="lugar" name="lugar"
+                   placeholder="Ej: Gimnasio Domeyko, Edificio 851…">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Horarios</legend>
+
+          <p class="descripcion-seccion">
+            Indica los días y horas que dedicas a esta actividad.
+            Debes agregar al menos un horario.
+          </p>
+
+          <ul id="lista-horarios" class="lista-horarios" aria-label="Horarios agregados">
+            <!-- Los horarios se insertan dinámicamente -->
+          </ul>
+
+          <div id="error-horarios" class="error" role="alert"></div>
+
+          <button type="button" class="btn btn-secundario" id="btn-agregar-horario">
+            + Agregar horario
+          </button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Archivos (fotos o videos)</legend>
+
+          <p class="descripcion-seccion">
+            Adjunta al menos una foto o video de la actividad.
+            Formatos aceptados: JPG, PNG, GIF, WEBP, MP4, WEBM, OGG. Máximo 50 MB por archivo.
+          </p>
+
+          <div class="campo campo-archivo">
+            <label for="archivos-media">
+              Archivos multimedia
+              <span class="obligatorio">*</span>
+            </label>
+            <label for="archivos-media" class="etiqueta-archivo" id="label-archivos-media">
+              Seleccionar fotos o videos…
+            </label>
+            <input type="file" id="archivos-media" name="archivos-media"
+                   accept="image/*,video/*" multiple>
+            <div id="preview-archivos" class="lista-archivos"></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Enlace de referencia</legend>
+
+          <div class="campo">
+            <label for="enlace">
+              URL de la actividad
+              <span class="obligatorio">*</span>
+              <span class="opcional">(Instagram, sitio web, canal, etc.)</span>
+            </label>
+            <input type="url" id="enlace" name="enlace"
+                   placeholder="https://www.instagram.com/miactividad">
+          </div>
+        </fieldset>
+
+        <p class="nota-obligatorio">
+          Los campos marcados con <span class="marca-obligatorio">*</span> son obligatorios.
+        </p>
+
+        <div class="acciones-formulario">
+          <button type="reset" class="btn btn-secundario" id="btn-limpiar">
+            Limpiar formulario
+          </button>
+          <button type="submit" class="btn btn-primario">
+            Guardar actividad
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>DCC Actividades &mdash; Área de Calidad de Vida &mdash; Departamento de Ciencias de la Computación</p>
+  </footer>
+
+  <script src="js/store.js" defer></script>
+  <script src="js/validacion.js" defer></script>
+  <script src="js/actividades.js" defer></script>
+</body>
+</html>

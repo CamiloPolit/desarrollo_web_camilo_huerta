@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCC Actividades — Registrar miembro</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/forms.css">
+</head>
+<body data-pagina="registro">
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Área Calidad de Vida DCC</span>
+        <span class="brand-subtitle">Gestión de actividades</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="registro.html" class="activo">Registrar miembro</a>
+        <a href="actividades.html">Informar actividad</a>
+        <a href="miembros.html">Ver miembros</a>
+        <a href="metricas.html">Métricas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+    <section aria-labelledby="titulo-registro">
+      <h1 class="page-title" id="titulo-registro">Registro de miembro</h1>
+
+      <div id="mensaje-estado" class="alerta alerta-info" style="display:none;" role="status"></div>
+
+      <form id="form-registro" novalidate>
+
+        <fieldset>
+          <legend>Datos de identificación</legend>
+
+          <div class="campos-dobles">
+            <div class="campo">
+              <label for="nombre">
+                Nombre completo
+                <span class="obligatorio">*</span>
+              </label>
+              <input type="text" id="nombre" name="nombre" autocomplete="name"
+                     placeholder="Ej: Pepito Pérez González">
+            </div>
+
+            <div class="campo">
+              <label for="rut">
+                RUT
+                <span class="obligatorio">*</span>
+              </label>
+              <input type="text" id="rut" name="rut" autocomplete="off"
+                     placeholder="Ej: 12345678-9">
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="tipo-miembro">
+              Tipo de miembro
+              <span class="obligatorio">*</span>
+            </label>
+            <select id="tipo-miembro" name="tipo-miembro">
+              <option value="">— Seleccione un tipo —</option>
+              <option value="pregrado">Estudiante de pregrado</option>
+              <option value="postgrado">Estudiante de postgrado</option>
+              <option value="funcionario">Funcionario/a</option>
+              <option value="academico">Académico/a</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <!-- Campos dinámicos según tipo de miembro -->
+        <div id="campos-tipo-contenedor">
+          <!-- Pregrado -->
+          <fieldset id="campos-pregrado" class="campos-tipo oculto">
+            <legend>Datos de estudiante de pregrado</legend>
+            <div class="campos-dobles">
+              <div class="campo">
+                <label for="plan-estudio">
+                  Plan de estudio activo
+                  <span class="obligatorio">*</span>
+                </label>
+                <select id="plan-estudio" name="plan-estudio">
+                  <option value="">— Seleccione por código —</option>
+                  <option value="plan-comun">Plan Común</option>
+                  <option value="ing-civil-computacion">Ingeniería Civil en Computación</option>
+                </select>
+              </div>
+              <div class="campo">
+                <label for="anio-ingreso-pre">
+                  Año de ingreso
+                  <span class="obligatorio">*</span>
+                </label>
+                <input type="number" id="anio-ingreso-pre" name="anio-ingreso"
+                       min="2000" max="2026" placeholder="Ej: 2021">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Postgrado -->
+          <fieldset id="campos-postgrado" class="campos-tipo oculto">
+            <legend>Datos de estudiante de postgrado</legend>
+            <div class="campos-dobles">
+              <div class="campo">
+                <label for="programa">
+                  Programa
+                  <span class="obligatorio">*</span>
+                </label>
+                <select id="programa" name="programa">
+                  <option value="">— Seleccione —</option>
+                  <option value="magister">Magíster en Ciencias de la Computación</option>
+                  <option value="doctorado">Doctorado en Ciencias de la Computación</option>
+                </select>
+              </div>
+              <div class="campo">
+                <label for="anio-ingreso-post">
+                  Año de ingreso
+                  <span class="obligatorio">*</span>
+                </label>
+                <input type="number" id="anio-ingreso-post" name="anio-ingreso-post"
+                       min="2000" max="2026" placeholder="Ej: 2022">
+              </div>
+            </div>
+            <div class="campo">
+              <label for="profesor-guia">
+                Profesor/a guía
+                <span class="opcional">(opcional)</span>
+              </label>
+              <input type="text" id="profesor-guia" name="profesor-guia"
+                     placeholder="Ej: Dr. Juan Soto">
+            </div>
+          </fieldset>
+
+          <!-- Funcionario -->
+          <fieldset id="campos-funcionario" class="campos-tipo oculto">
+            <legend>Datos de funcionario/a</legend>
+            <div class="campos-dobles">
+              <div class="campo">
+                <label for="cargo">
+                  Cargo
+                  <span class="obligatorio">*</span>
+                </label>
+                <input type="text" id="cargo" name="cargo"
+                       placeholder="Ej: Secretaria de Docencia">
+              </div>
+              <div class="campo">
+                <label for="unidad">
+                  Unidad
+                  <span class="obligatorio">*</span>
+                </label>
+                <input type="text" id="unidad" name="unidad"
+                       placeholder="Ej: Dirección de Estudios">
+              </div>
+            </div>
+            <div class="campo">
+              <label for="tipo-contrato">
+                Tipo de contrato
+                <span class="obligatorio">*</span>
+              </label>
+              <select id="tipo-contrato" name="tipo-contrato">
+                <option value="">— Seleccione —</option>
+                <option value="planta">Planta</option>
+                <option value="contrata">Contrata</option>
+                <option value="honorarios">Honorarios</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- Académico -->
+          <fieldset id="campos-academico" class="campos-tipo oculto">
+            <legend>Datos de académico/a</legend>
+            <div class="campos-dobles">
+              <div class="campo">
+                <label for="jerarquia">
+                  Jerarquía académica
+                  <span class="obligatorio">*</span>
+                </label>
+                <select id="jerarquia" name="jerarquia">
+                  <option value="">— Seleccione —</option>
+                  <option value="asistente">Asistente</option>
+                  <option value="asociado">Asociado/a</option>
+                  <option value="titular">Titular</option>
+                  <option value="adjunto">Adjunto/a</option>
+                </select>
+              </div>
+              <div class="campo">
+                <label for="oficina">
+                  Número de oficina
+                  <span class="opcional">(opcional)</span>
+                </label>
+                <input type="text" id="oficina" name="oficina"
+                       placeholder="Ej: 306">
+              </div>
+            </div>
+            <div class="campo">
+              <label for="area-investigacion">
+                Área de investigación
+                <span class="obligatorio">*</span>
+              </label>
+              <input type="text" id="area-investigacion" name="area-investigacion"
+                     placeholder="Ej: Inteligencia Artificial, Seguridad Informática">
+            </div>
+          </fieldset>
+        </div>
+
+        <fieldset>
+          <legend>Datos de contacto</legend>
+
+          <div class="campos-dobles">
+            <div class="campo">
+              <label for="email">
+                Correo electrónico
+                <span class="obligatorio">*</span>
+              </label>
+              <input type="email" id="email" name="email" autocomplete="email"
+                     placeholder="Ej: pepito.perez@dcc.uchile.cl">
+            </div>
+
+            <div class="campo">
+              <label for="telefono">
+                Teléfono
+                <span class="opcional">(opcional)</span>
+              </label>
+              <input type="tel" id="telefono" name="telefono" autocomplete="tel"
+                     placeholder="Ej: +56912345678">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Foto de perfil</legend>
+          <div class="campo campo-archivo">
+            <label for="foto-perfil">
+              Foto de perfil
+              <span class="opcional">(opcional &mdash; JPG, PNG o WEBP, máx. 5 MB)</span>
+            </label>
+            <label for="foto-perfil" class="etiqueta-archivo" id="label-foto-perfil">
+              Seleccionar imagen…
+            </label>
+            <input type="file" id="foto-perfil" name="foto-perfil"
+                   accept=".jpg,.jpeg,.png,.webp">
+            <div id="preview-foto" class="lista-archivos"></div>
+          </div>
+        </fieldset>
+
+        <p class="nota-obligatorio">
+          Los campos marcados con <span class="marca-obligatorio">*</span> son obligatorios.
+        </p>
+
+        <div class="acciones-formulario">
+          <button type="reset" class="btn btn-secundario" id="btn-limpiar">
+            Limpiar formulario
+          </button>
+          <button type="submit" class="btn btn-primario">
+            Registrar miembro
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>DCC Actividades &mdash; Área de Calidad de Vida &mdash; Departamento de Ciencias de la Computación</p>
+  </footer>
+
+  <script src="js/store.js" defer></script>
+  <script src="js/validacion.js" defer></script>
+  <script src="js/registro.js" defer></script>
+</body>
+</html>

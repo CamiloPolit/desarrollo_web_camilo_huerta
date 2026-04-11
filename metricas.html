@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCC Actividades — Métricas</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/graficos.css">
+</head>
+<body data-pagina="metricas">
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Área Calidad de Vida DCC</span>
+        <span class="brand-subtitle">Gestión de actividades</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="registro.html">Registrar miembro</a>
+        <a href="actividades.html">Informar actividad</a>
+        <a href="miembros.html">Ver miembros</a>
+        <a href="metricas.html" class="activo">Métricas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+    <section aria-labelledby="titulo-metricas">
+      <h1 class="page-title" id="titulo-metricas">Métricas e indicadores</h1>
+
+      <div class="controles-metricas">
+        <button type="button" class="btn btn-secundario" id="btn-actualizar">
+          Actualizar datos
+        </button>
+      </div>
+
+      <!-- Resumen numérico -->
+      <section aria-labelledby="titulo-resumen">
+        <h2 id="titulo-resumen" class="titulo-subseccion">
+          Resumen general
+        </h2>
+        <div class="metricas-resumen" id="resumen-numerico">
+          <div class="metrica-item">
+            <span class="metrica-numero" id="total-miembros">0</span>
+            <span class="metrica-etiqueta">Miembros registrados</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-numero" id="total-actividades">0</span>
+            <span class="metrica-etiqueta">Actividades informadas</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-numero" id="total-con-actividad">0</span>
+            <span class="metrica-etiqueta">Miembros con actividades</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-numero" id="promedio-actividades">0</span>
+            <span class="metrica-etiqueta">Promedio actividades por miembro</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gráficos -->
+      <div class="grilla-graficos">
+
+        <article class="grafico-card">
+          <h2>Miembros por tipo</h2>
+          <div class="contenedor-canvas">
+            <canvas id="grafico-tipos"
+                    role="img" aria-label="Gráfico de torta: miembros por tipo"></canvas>
+          </div>
+        </article>
+
+        <article class="grafico-card">
+          <h2>Actividades por categoría</h2>
+          <div class="contenedor-canvas">
+            <canvas id="grafico-categorias"
+                    role="img" aria-label="Gráfico de barras: actividades por categoría"></canvas>
+          </div>
+        </article>
+
+        <article class="grafico-card">
+          <h2>Top 10: actividades por miembro</h2>
+          <div class="contenedor-canvas">
+            <canvas id="grafico-top-miembros"
+                    role="img" aria-label="Gráfico de barras horizontales: actividades por miembro"></canvas>
+          </div>
+        </article>
+
+        <article class="grafico-card">
+          <h2>Actividades por día de la semana</h2>
+          <div class="contenedor-canvas">
+            <canvas id="grafico-dias"
+                    role="img" aria-label="Gráfico de barras: distribución por día de la semana"></canvas>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>DCC Actividades &mdash; Área de Calidad de Vida &mdash; Departamento de Ciencias de la Computación</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="js/store.js" defer></script>
+  <script src="js/graficos.js" defer></script>
+</body>
+</html>

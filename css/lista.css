@@ -1,0 +1,273 @@
+/* lista.css — Tabla de miembros, filtros y paginación */
+
+/* ── Barra de controles ───────────────────────────────────── */
+
+.controles-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.controles-lista .campo {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 150px;
+}
+
+.controles-lista .campo label {
+  font-size: 0.82rem;
+}
+
+/* ── Conteo de resultados ────────────────────────────────── */
+
+.conteo-resultados {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Tabla ───────────────────────────────────────────────── */
+
+.contenedor-tabla {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  font-size: 0.9rem;
+}
+
+thead th {
+  background: var(--color-primary);
+  color: #fff;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+thead th:first-child {
+  border-radius: var(--radius) 0 0 0;
+}
+
+thead th:last-child {
+  border-radius: 0 var(--radius) 0 0;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.1s;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--color-bg);
+}
+
+tbody tr:hover {
+  background: #e8f0fe;
+}
+
+tbody td {
+  padding: 0.7rem 1rem;
+  vertical-align: middle;
+}
+
+.celda-tipo {
+  white-space: nowrap;
+}
+
+.etiqueta-tipo {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tipo-pregrado  { background: #e8f4fd; color: #1565c0; }
+.tipo-postgrado { background: #fce4ec; color: #880e4f; }
+.tipo-funcionario { background: #f3e5f5; color: #4a148c; }
+.tipo-academico  { background: #e8f5e9; color: #1b5e20; }
+
+.btn-ver-detalle {
+  background: none;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-ver-detalle:hover {
+  background: #e8f0fe;
+}
+
+/* ── Estado vacío ────────────────────────────────────────── */
+
+.sin-resultados {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--color-text-muted);
+}
+
+.sin-resultados p {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Paginación ──────────────────────────────────────────── */
+
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.btn-pagina {
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0 0.4rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-pagina:hover {
+  background: #e8f0fe;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-pagina.activo {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: default;
+}
+
+.btn-pagina:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Modal de detalle del miembro ───────────────────────── */
+
+.overlay-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.overlay-modal.visible {
+  display: flex;
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.modal h2 {
+  font-size: 1.2rem;
+  color: var(--color-primary-dark);
+  margin-bottom: 1rem;
+  padding-right: 2rem;
+}
+
+.btn-cerrar-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.btn-cerrar-modal:hover {
+  color: var(--color-text);
+}
+
+.titulo-actividades-modal {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+}
+
+.lista-actividades-modal {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+.detalle-lista {
+  margin-top: 0.75rem;
+}
+
+.detalle-lista dt {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 0.75rem;
+}
+
+.detalle-lista dd {
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin-left: 0;
+}
+
+/* ── Responsivo ──────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  thead th,
+  tbody td {
+    padding: 0.55rem 0.6rem;
+    font-size: 0.82rem;
+  }
+}
