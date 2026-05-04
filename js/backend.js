@@ -270,18 +270,102 @@ if (document.body.dataset.pagina === 'miembros') {
             oficina:           d.oficina
           };
 
-          /* Inyectar las actividades en store para que la lógica
-             original de abrirModal las encuentre al filtrar */
+          /* Inyectar actividades mínimas en store para que abrirModal
+             no muestre "No ha registrado actividades aún" */
           store.activities = (d.actividades || []).map(function (a) {
-            return {
-              id:        String(a.id),
-              miembroId: String(d.id),
-              titulo:    a.titulo,
-              categoria: a.categoria
-            };
+            return { id: String(a.id), miembroId: String(d.id), titulo: a.titulo, categoria: a.categoria };
           });
 
           abrirModalOriginal(mCompleto);
+
+          /* Reemplazar la lista de actividades con el detalle completo */
+          var lista = document.getElementById('lista-actividades-modal');
+          if (!lista) return;
+          lista.innerHTML = '';
+
+          var CAT_LABEL = {
+            artistica: 'Artística', deportiva: 'Deportiva', tecnologica: 'Tecnológica',
+            social: 'Social', recreativa: 'Recreativa', otra: 'Otra'
+          };
+
+          if (!d.actividades || d.actividades.length === 0) {
+            var liVacio = document.createElement('li');
+            liVacio.textContent = 'No ha registrado actividades aún.';
+            lista.appendChild(liVacio);
+            return;
+          }
+
+          d.actividades.forEach(function (a) {
+            var li = document.createElement('li');
+            li.className = 'actividad-detalle';
+
+            /* Encabezado: título + categoría */
+            var h4 = document.createElement('h4');
+            h4.className = 'actividad-titulo';
+            h4.textContent = a.titulo;
+            var spanCat = document.createElement('span');
+            spanCat.className = 'etiqueta-categoria';
+            spanCat.textContent = CAT_LABEL[a.categoria] || a.categoria;
+            h4.appendChild(spanCat);
+            li.appendChild(h4);
+
+            /* Descripción */
+            if (a.descripcion) {
+              var p = document.createElement('p');
+              p.className = 'actividad-descripcion';
+              p.textContent = a.descripcion;
+              li.appendChild(p);
+            }
+
+            /* Lugar */
+            if (a.lugar) {
+              var pLugar = document.createElement('p');
+              pLugar.className = 'actividad-meta';
+              pLugar.innerHTML = '<strong>Lugar:</strong> ' + a.lugar;
+              li.appendChild(pLugar);
+            }
+
+            /* Horarios */
+            if (a.horarios && a.horarios.length > 0) {
+              var pHor = document.createElement('p');
+              pHor.className = 'actividad-meta';
+              var horTexto = a.horarios.map(function (h) {
+                return h.dia + ' ' + h.hora_inicio + '–' + h.hora_fin;
+              }).join(', ');
+              pHor.innerHTML = '<strong>Horario:</strong> ' + horTexto;
+              li.appendChild(pHor);
+            }
+
+            /* Enlace */
+            if (a.enlace) {
+              var pEnlace = document.createElement('p');
+              pEnlace.className = 'actividad-meta';
+              var anchor = document.createElement('a');
+              anchor.href = a.enlace;
+              anchor.target = '_blank';
+              anchor.rel = 'noopener noreferrer';
+              anchor.textContent = a.enlace;
+              pEnlace.innerHTML = '<strong>Enlace:</strong> ';
+              pEnlace.appendChild(anchor);
+              li.appendChild(pEnlace);
+            }
+
+            /* Fotos */
+            if (a.fotos && a.fotos.length > 0) {
+              var divFotos = document.createElement('div');
+              divFotos.className = 'actividad-fotos';
+              a.fotos.forEach(function (f) {
+                var img = document.createElement('img');
+                img.src = BACKEND_URL + '/static/' + f.ruta;
+                img.alt = f.nombre;
+                img.className = 'actividad-foto-miniatura';
+                divFotos.appendChild(img);
+              });
+              li.appendChild(divFotos);
+            }
+
+            lista.appendChild(li);
+          });
         })
         .catch(function () {
           abrirModalOriginal(m);
