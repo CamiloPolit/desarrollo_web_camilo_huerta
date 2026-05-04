@@ -12,8 +12,6 @@ var form = document.getElementById('form-registro');
 var selectTipo = document.getElementById('tipo-miembro');
 var mensajeEstado = document.getElementById('mensaje-estado');
 var btnLimpiar = document.getElementById('btn-limpiar');
-var inputFotoPerfil = document.getElementById('foto-perfil');
-var previewFoto = document.getElementById('preview-foto');
 
 /* ── Campos específicos por tipo de miembro ──────────────── */
 
@@ -33,27 +31,6 @@ function mostrarCamposTipo(tipo) {
 
 selectTipo.addEventListener('change', function () {
   mostrarCamposTipo(this.value);
-});
-
-/* ── Vista previa de foto de perfil ──────────────────────── */
-
-inputFotoPerfil.addEventListener('change', function () {
-  previewFoto.innerHTML = '';
-  var f = this.files[0];
-  if (!f) return;
-  var result = v.fotoPerfilOpcional(this.files);
-  v.mostrarError(inputFotoPerfil, result);
-  if (result.valid) {
-    var url = URL.createObjectURL(f);
-    var div = document.createElement('div');
-    div.className = 'miniatura-archivo';
-    var img = document.createElement('img');
-    img.src = url;
-    img.alt = 'Vista previa de foto de perfil';
-    div.appendChild(img);
-    div.appendChild(document.createTextNode(f.name));
-    previewFoto.appendChild(div);
-  }
 });
 
 /* ── Validación al salir de cada campo (blur) ────────────── */
@@ -115,12 +92,6 @@ form.addEventListener('submit', function (e) {
   valid = v.mostrarError(
     document.getElementById('telefono'),
     v.telefono(document.getElementById('telefono').value)
-  ) && valid;
-
-  /* Foto de perfil: opcional pero se valida si se adjuntó alguna */
-  valid = v.mostrarError(
-    inputFotoPerfil,
-    v.fotoPerfilOpcional(inputFotoPerfil.files)
   ) && valid;
 
   /* Campos específicos según el tipo seleccionado */
@@ -225,7 +196,6 @@ form.addEventListener('submit', function (e) {
   );
   form.reset();
   mostrarCamposTipo('');
-  previewFoto.innerHTML = '';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -233,7 +203,6 @@ form.addEventListener('submit', function (e) {
 
 btnLimpiar.addEventListener('click', function () {
   mostrarCamposTipo('');
-  previewFoto.innerHTML = '';
   /* Eliminar todos los mensajes de error visibles */
   form.querySelectorAll('.campo-invalido').forEach(function (el) {
     el.classList.remove('campo-invalido');

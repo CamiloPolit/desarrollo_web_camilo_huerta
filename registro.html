@@ -31,6 +31,7 @@
       <h1 class="page-title" id="titulo-registro">Registro de miembro</h1>
 
       <div id="mensaje-estado" class="alerta alerta-info" style="display:none;" role="status"></div>
+      <div id="mensaje-backend" class="alerta" style="display:none;"></div>
 
       <form id="form-registro" novalidate>
 
@@ -207,6 +208,32 @@
         </div>
 
         <fieldset>
+          <legend>Ubicación</legend>
+
+          <div class="campos-dobles">
+            <div class="campo">
+              <label for="region">
+                Región
+                <span class="obligatorio">*</span>
+              </label>
+              <select id="region" name="region">
+                <option value="">— Seleccione una región —</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="comuna_id">
+                Comuna
+                <span class="obligatorio">*</span>
+              </label>
+              <select id="comuna_id" name="comuna_id">
+                <option value="">— Seleccione primero una región —</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
           <legend>Datos de contacto</legend>
 
           <div class="campos-dobles">
@@ -227,22 +254,6 @@
               <input type="tel" id="telefono" name="telefono" autocomplete="tel"
                      placeholder="Ej: +56912345678">
             </div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Foto de perfil</legend>
-          <div class="campo campo-archivo">
-            <label for="foto-perfil">
-              Foto de perfil
-              <span class="opcional">(opcional &mdash; JPG, PNG o WEBP, máx. 5 MB)</span>
-            </label>
-            <label for="foto-perfil" class="etiqueta-archivo" id="label-foto-perfil">
-              Seleccionar imagen…
-            </label>
-            <input type="file" id="foto-perfil" name="foto-perfil"
-                   accept=".jpg,.jpeg,.png,.webp">
-            <div id="preview-foto" class="lista-archivos"></div>
           </div>
         </fieldset>
 
@@ -269,5 +280,6 @@
   <script src="js/store.js" defer></script>
   <script src="js/validacion.js" defer></script>
   <script src="js/registro.js" defer></script>
+  <script src="js/backend.js" defer></script>
 </body>
 </html>

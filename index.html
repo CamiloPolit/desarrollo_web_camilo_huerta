@@ -29,6 +29,8 @@
     <section aria-labelledby="titulo-bienvenida">
       <h1 class="page-title" id="titulo-bienvenida">Sistema de Actividades Comunitarias</h1>
 
+      <div id="mensaje-inicio" class="alerta" style="display:none;" role="status"></div>
+
       <div class="card">
         <p>
           Bienvenido al sistema de gestión de actividades extracurriculares del
@@ -73,11 +75,20 @@
         </ul>
       </nav>
     </section>
+
+    <section aria-labelledby="titulo-ultimos">
+      <h2 id="titulo-ultimos" class="page-title subtitulo-seccion">Últimos miembros registrados</h2>
+      <ul id="lista-ultimos-miembros" class="lista-ultimos">
+        <li>Cargando…</li>
+      </ul>
+    </section>
   </main>
 
   <footer class="site-footer">
     <p>DCC Actividades &mdash; Área de Calidad de Vida &mdash; Departamento de Ciencias de la Computación</p>
   </footer>
 
+
+  <script src="js/backend.js" defer></script>
 </body>
 </html>
