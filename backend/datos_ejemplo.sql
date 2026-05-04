@@ -1,8 +1,16 @@
 -- datos_ejemplo.sql — Datos de demostración equivalentes a los mockups del frontend.
 -- Ejecutar DESPUÉS de schema.sql y region-comuna.sql.
--- Uso: mysql -u cc5002 -p tarea2 < datos_ejemplo.sql
+-- Uso: mysql -u cc5002 -pprogramacionweb tarea2 < datos_ejemplo.sql
 
 USE `tarea2`;
+
+-- ── Purga de datos (respeta el orden de las FK) ───────────────
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE `foto`;
+TRUNCATE TABLE `horario`;
+TRUNCATE TABLE `actividad`;
+TRUNCATE TABLE `miembro`;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- ── Miembros ──────────────────────────────────────────────────
 
