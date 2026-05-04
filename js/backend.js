@@ -123,76 +123,103 @@ if (document.body.dataset.pagina === 'registro') {
 
 if (document.body.dataset.pagina === 'actividades') {
 
-  var formActividad = document.getElementById('form-actividad');
-  if (formActividad) {
-    formActividad.addEventListener('submit', function () {
-      setTimeout(function () {
-        var mensajeEl = document.getElementById('mensaje-estado');
-        if (!mensajeEl || mensajeEl.style.display === 'none') return;
-        if (!mensajeEl.classList.contains('alerta-exito')) return;
+  /* Reemplazar datos de ejemplo con los miembros de la BD y repoblar el selector.
+     Trae todas las páginas para que el selector muestre todos los miembros. */
+  window.dccStore.members = [];
 
-        /* Construir FormData con la estructura que espera el backend.
-           El formulario de actividades maneja UNA actividad por envío;
-           la mapeamos a titulo[], categoria[], etc. */
-        var fd = new FormData();
+  function convertirMiembro(m) {
+    return {
+      id: String(m.id),
+      nombre: m.nombre,
+      rut: m.rut,
+      tipo: m.tipo,
+      email: m.email,
+      telefono: m.telefono || '',
+      fechaRegistro: m.fecha_registro,
+      _backendId: m.id
+    };
+  }
 
-        /* Obtener el miembro seleccionado — el backend no usa miembro_id directamente
-           en /registro (el miembro se crea allí), pero actividades.html registra
-           actividades para miembros ya existentes. Por ahora lo incluimos como referencia. */
-        var selectMiembro = document.getElementById('miembro-selector');
-        if (selectMiembro) fd.append('miembro_id', selectMiembro.value);
-
-        var titulo = document.getElementById('titulo-actividad-input');
-        var categoria = document.getElementById('categoria');
-        var descripcion = document.getElementById('descripcion');
-        var lugar = document.getElementById('lugar');
-        var enlace = document.getElementById('enlace');
-
-        fd.append('titulo[]', titulo ? titulo.value.trim() : '');
-        fd.append('categoria[]', categoria ? categoria.value : '');
-        fd.append('descripcion[]', descripcion ? descripcion.value.trim() : '');
-        fd.append('lugar[]', lugar ? lugar.value.trim() : '');
-        fd.append('enlace[]', enlace ? enlace.value.trim() : '');
-
-        /* Horarios: recoger todos los .horario-item */
-        var slots = document.querySelectorAll('#lista-horarios .horario-item');
-        slots.forEach(function (slot) {
-          var idx = slot.dataset.idx;
-          var diaEl = document.getElementById('dia-' + idx);
-          var inicioEl = document.getElementById('inicio-' + idx);
-          var finEl = document.getElementById('fin-' + idx);
-          fd.append('dia_0[]', diaEl ? diaEl.value : '');
-          fd.append('hora_inicio_0[]', inicioEl ? inicioEl.value : '');
-          fd.append('hora_fin_0[]', finEl ? finEl.value : '');
-        });
-
-        /* Archivos */
-        var inputArchivos = document.getElementById('archivos-media');
-        if (inputArchivos && inputArchivos.files) {
-          for (var i = 0; i < inputArchivos.files.length; i++) {
-            fd.append('fotos_0[]', inputArchivos.files[i]);
-          }
+  function cargarPagina(pagina, acumulados) {
+    fetch(BACKEND_URL + '/miembros?pagina=' + pagina)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var todos = acumulados.concat((data.miembros || []).map(convertirMiembro));
+        if (pagina < (data.total_paginas || 1)) {
+          cargarPagina(pagina + 1, todos);
+        } else {
+          window.dccStore.members = todos;
+          if (typeof cargarMiembros === 'function') cargarMiembros();
         }
+      })
+      .catch(function () {
+        if (typeof cargarMiembros === 'function') cargarMiembros();
+      });
+  }
 
-        fetch(BACKEND_URL + '/actividad', {
-          method: 'POST',
-          body: fd
-        })
-          .then(function (r) { return r.json(); })
-          .then(function (data) {
-            if (data.ok) {
-              mostrarMensajeBackend('mensaje-backend', 'Actividad guardada en la base de datos.', 'exito');
-            } else {
-              mostrarMensajeBackend('mensaje-backend', 'Error al guardar la actividad en la base de datos.', 'error');
-            }
-          })
-          .catch(function () {
-            mostrarMensajeBackend('mensaje-backend',
-              'No se pudo conectar con el servidor. La actividad se guardó sólo en memoria.',
-              'error');
-          });
-      }, 50);
+  cargarPagina(1, []);
+
+  /*
+   * Interceptamos store.activities.push — momento exacto en que actividades.js
+   * confirma que la validación pasó. El formulario aún no fue reseteado,
+   * así que podemos leer todos los valores del DOM en ese instante.
+   */
+  var pushActividadOriginal = window.dccStore.activities.push.bind(window.dccStore.activities);
+  window.dccStore.activities.push = function (actividad) {
+    pushActividadOriginal(actividad);
+    enviarActividadAlBackend(actividad);
+  };
+
+  function enviarActividadAlBackend(actividad) {
+    var selectMiembro = document.getElementById('miembro-selector');
+    var miembroId = selectMiembro ? selectMiembro.value : '';
+
+    var fd = new FormData();
+    fd.append('miembro_id', miembroId);
+    fd.append('titulo[]',      actividad.titulo);
+    fd.append('categoria[]',   actividad.categoria);
+    fd.append('descripcion[]', actividad.descripcion);
+    fd.append('lugar[]',       actividad.lugar || '');
+    fd.append('enlace[]',      actividad.enlace);
+
+    /* Horarios — leer del DOM antes del reset */
+    var slots = document.querySelectorAll('#lista-horarios .horario-item');
+    slots.forEach(function (slot) {
+      var idx = slot.dataset.idx;
+      var dia    = document.getElementById('dia-'    + idx);
+      var inicio = document.getElementById('inicio-' + idx);
+      var fin    = document.getElementById('fin-'    + idx);
+      fd.append('dia_0[]',         dia    ? dia.value    : '');
+      fd.append('hora_inicio_0[]', inicio ? inicio.value : '');
+      fd.append('hora_fin_0[]',    fin    ? fin.value    : '');
     });
+
+    /* Archivos */
+    var inputArchivos = document.getElementById('archivos-media');
+    if (inputArchivos && inputArchivos.files) {
+      for (var i = 0; i < inputArchivos.files.length; i++) {
+        fd.append('fotos_0[]', inputArchivos.files[i]);
+      }
+    }
+
+    fetch(BACKEND_URL + '/actividad', { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.ok) {
+          var msg = encodeURIComponent('Actividad "' + actividad.titulo + '" registrada exitosamente.');
+          window.location.href = 'index.html?mensaje=' + msg;
+        } else {
+          var textoErr = data.errores ? Object.values(data.errores).join(' ') : 'Error al guardar.';
+          if (data.act_errores && data.act_errores[0]) {
+            textoErr += ' ' + Object.values(data.act_errores[0]).join(' ');
+          }
+          mostrarMensajeBackend('mensaje-backend', textoErr, 'error');
+        }
+      })
+      .catch(function () {
+        mostrarMensajeBackend('mensaje-backend',
+          'No se pudo conectar con el servidor. La actividad se guardó sólo en memoria.', 'error');
+      });
   }
 }
 
@@ -201,13 +228,70 @@ if (document.body.dataset.pagina === 'actividades') {
    ════════════════════════════════════════════════════════════ */
 
 if (document.body.dataset.pagina === 'miembros') {
-  /* Vaciar datos de ejemplo antes del fetch para evitar que aparezcan
-     brevemente mientras llega la respuesta del backend */
+  /* Vaciar datos de ejemplo antes del fetch */
   window.dccStore.members = [];
+
+  /*
+   * Parcheamos abrirModal una vez que miembros.js la haya declarado.
+   * Cuando el miembro viene del backend (_backendId), pedimos el detalle
+   * completo (incluye actividades) antes de abrir el modal.
+   */
+  setTimeout(function () {
+    var abrirModalOriginal = abrirModal;
+
+    abrirModal = function (m) {
+      if (!m._backendId) {
+        abrirModalOriginal(m);
+        return;
+      }
+
+      fetch(BACKEND_URL + '/miembros/' + m._backendId)
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          /* Construir objeto con los campos que espera miembros.js */
+          var mCompleto = {
+            id:                String(d.id),
+            _backendId:        d.id,
+            nombre:            d.nombre,
+            rut:               d.rut,
+            tipo:              d.tipo,
+            email:             d.email,
+            telefono:          d.telefono || '',
+            fechaRegistro:     d.fecha_registro,
+            planEstudio:       d.plan_estudio,
+            anioIngreso:       d.anio_ingreso,
+            programa:          d.programa,
+            profesorGuia:      d.profesor_guia,
+            cargo:             d.cargo,
+            unidad:            d.unidad,
+            tipoContrato:      d.tipo_contrato,
+            jerarquia:         d.jerarquia,
+            areaInvestigacion: d.area_investigacion,
+            oficina:           d.oficina
+          };
+
+          /* Inyectar las actividades en store para que la lógica
+             original de abrirModal las encuentre al filtrar */
+          store.activities = (d.actividades || []).map(function (a) {
+            return {
+              id:        String(a.id),
+              miembroId: String(d.id),
+              titulo:    a.titulo,
+              categoria: a.categoria
+            };
+          });
+
+          abrirModalOriginal(mCompleto);
+        })
+        .catch(function () {
+          abrirModalOriginal(m);
+        });
+    };
+  }, 0);
+
   fetch(BACKEND_URL + '/miembros?pagina=1')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      /* Reemplazar completamente los datos de ejemplo con los de la BD */
       window.dccStore.members = (data.miembros || []).map(function (m) {
         return {
           id: String(m.id),
