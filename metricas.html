@@ -105,7 +105,26 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-  <script src="js/store.js" defer></script>
-  <script src="js/graficos.js" defer></script>
+  <script src="js/store.js"></script>
+  <script>
+    /* Datos mockup para metricas.html — equivalentes a datos_ejemplo.sql */
+    window.dccStore.members = [
+      { id: '1', nombre: 'Ana González Pérez',    tipo: 'pregrado',    email: 'ana.gonzalez@dcc.uchile.cl' },
+      { id: '2', nombre: 'Carlos Vega Soto',       tipo: 'postgrado',   email: 'carlos.vega@uchile.cl' },
+      { id: '3', nombre: 'Lucía Fuentes Mora',     tipo: 'academico',   email: 'lucia.fuentes@dcc.uchile.cl' },
+      { id: '4', nombre: 'Pedro Rojas Díaz',       tipo: 'funcionario', email: 'pedro.rojas@uchile.cl' },
+      { id: '5', nombre: 'Sofía Martínez Lagos',   tipo: 'pregrado',    email: 'sofia.martinez@ing.uchile.cl' },
+      { id: '6', nombre: 'Tomás Herrera Núñez',    tipo: 'postgrado',   email: 'tomas.herrera@uchile.cl' }
+    ];
+    window.dccStore.activities = [
+      { id: '1', miembroId: '1', titulo: 'Taller de fotografía urbana',    categoria: 'artistica',   horarios: [{ dia: 'Sábado',    hora_inicio: '10:00', hora_fin: '13:00' }] },
+      { id: '2', miembroId: '2', titulo: 'Natación competitiva',           categoria: 'deportiva',   horarios: [{ dia: 'Lunes',     hora_inicio: '07:00', hora_fin: '08:30' }, { dia: 'Miércoles', hora_inicio: '07:00', hora_fin: '08:30' }] },
+      { id: '3', miembroId: '3', titulo: 'Club de robótica',               categoria: 'tecnologica', horarios: [{ dia: 'Viernes',   hora_inicio: '15:00', hora_fin: '18:00' }] },
+      { id: '4', miembroId: '4', titulo: 'Voluntariado en biblioteca',     categoria: 'social',      horarios: [{ dia: 'Sábado',    hora_inicio: '14:00', hora_fin: '17:00' }] },
+      { id: '5', miembroId: '5', titulo: 'Grupo de senderismo',            categoria: 'deportiva',   horarios: [{ dia: 'Domingo',   hora_inicio: '08:00', hora_fin: '16:00' }] },
+      { id: '6', miembroId: '6', titulo: 'Jams de improvisación teatral',  categoria: 'artistica',   horarios: [{ dia: 'Jueves',    hora_inicio: '19:00', hora_fin: '21:00' }] }
+    ];
+  </script>
+  <script src="js/graficos.js"></script>
 </body>
 </html>
