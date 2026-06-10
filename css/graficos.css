@@ -122,10 +122,27 @@
   padding: 2rem 1rem;
 }
 
+/* ── Card ancho (ocupa 2 columnas) ───────────────────────── */
+
+.grafico-card--ancho {
+  grid-column: 1 / -1;
+}
+
+/* ── Enlace volver a portada ─────────────────────────────── */
+
+.volver-portada {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
 /* ── Responsivo ──────────────────────────────────────────── */
 
 @media (max-width: 900px) {
   .grilla-graficos {
     grid-template-columns: 1fr;
+  }
+
+  .grafico-card--ancho {
+    grid-column: auto;
   }
 }

@@ -4,5 +4,6 @@ from .miembro import Miembro
 from .actividad import Actividad
 from .horario import Horario
 from .foto import Foto
+from .comentario import Comentario
 
-__all__ = ['Region', 'Comuna', 'Miembro', 'Actividad', 'Horario', 'Foto']
+__all__ = ['Region', 'Comuna', 'Miembro', 'Actividad', 'Horario', 'Foto', 'Comentario']

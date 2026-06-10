@@ -231,6 +231,45 @@ if (document.body.dataset.pagina === 'miembros') {
   /* Vaciar datos de ejemplo antes del fetch */
   window.dccStore.members = [];
 
+  function cargarComentarios(actividadId, ulEl) {
+    fetch(BACKEND_URL + '/actividades/' + actividadId + '/comentarios')
+      .then(function (r) { return r.json(); })
+      .then(function (comentarios) {
+        ulEl.innerHTML = '';
+        if (comentarios.length === 0) {
+          var liVacio = document.createElement('li');
+          liVacio.className = 'comentario-vacio';
+          liVacio.textContent = 'Aún no hay comentarios.';
+          ulEl.appendChild(liVacio);
+          return;
+        }
+        comentarios.forEach(function (c) {
+          var li = document.createElement('li');
+          li.className = 'comentario-item';
+
+          var spanFecha = document.createElement('span');
+          spanFecha.className = 'comentario-fecha';
+          spanFecha.textContent = c.fecha;
+
+          var spanNombre = document.createElement('span');
+          spanNombre.className = 'comentario-nombre';
+          spanNombre.textContent = c.nombre;
+
+          var pTexto = document.createElement('p');
+          pTexto.className = 'comentario-texto';
+          pTexto.textContent = c.texto;
+
+          li.appendChild(spanFecha);
+          li.appendChild(spanNombre);
+          li.appendChild(pTexto);
+          ulEl.appendChild(li);
+        });
+      })
+      .catch(function () {
+        ulEl.innerHTML = '<li>No se pudieron cargar los comentarios.</li>';
+      });
+  }
+
   /*
    * Parcheamos abrirModal una vez que miembros.js la haya declarado.
    * Cuando el miembro viene del backend (_backendId), pedimos el detalle
@@ -364,7 +403,88 @@ if (document.body.dataset.pagina === 'miembros') {
               li.appendChild(divFotos);
             }
 
+            /* Sección de comentarios */
+            var secCom = document.createElement('section');
+            secCom.className = 'comentarios-seccion';
+            secCom.id = 'comentarios-' + a.id;
+
+            var h5Com = document.createElement('h5');
+            h5Com.textContent = 'Comentarios';
+            secCom.appendChild(h5Com);
+
+            var ulCom = document.createElement('ul');
+            ulCom.className = 'lista-comentarios';
+            secCom.appendChild(ulCom);
+
+            /* Formulario de nuevo comentario */
+            var formCom = document.createElement('form');
+            formCom.className = 'form-comentario';
+            formCom.dataset.actividadId = a.id;
+            formCom.innerHTML =
+              '<div class="form-group">' +
+                '<label>Nombre del comentarista</label>' +
+                '<input type="text" name="nombre" minlength="3" maxlength="80" required>' +
+              '</div>' +
+              '<div class="form-group">' +
+                '<label>Comentario</label>' +
+                '<textarea name="texto" rows="4" cols="50" minlength="5" required></textarea>' +
+              '</div>' +
+              '<button type="submit" class="btn btn-primario">Agregar comentario</button>' +
+              '<div class="comentario-errores" role="alert"></div>';
+            secCom.appendChild(formCom);
+
+            li.appendChild(secCom);
             lista.appendChild(li);
+
+            /* Cargar comentarios existentes */
+            cargarComentarios(a.id, ulCom);
+
+            /* Manejar envío del formulario */
+            formCom.addEventListener('submit', function (e) {
+              e.preventDefault();
+              var nombreInput = formCom.querySelector('[name="nombre"]');
+              var textoInput  = formCom.querySelector('[name="texto"]');
+              var errDiv      = formCom.querySelector('.comentario-errores');
+              var nombre = nombreInput.value.trim();
+              var texto  = textoInput.value.trim();
+
+              errDiv.textContent = '';
+
+              /* Validación cliente */
+              var msgs = [];
+              if (nombre.length < 3) msgs.push('El nombre debe tener al menos 3 caracteres.');
+              if (texto.length < 5)  msgs.push('El comentario debe tener al menos 5 caracteres.');
+              if (msgs.length > 0) {
+                errDiv.textContent = msgs.join(' ');
+                return;
+              }
+
+              var btn = formCom.querySelector('button[type="submit"]');
+              btn.disabled = true;
+
+              fetch(BACKEND_URL + '/actividades/' + formCom.dataset.actividadId + '/comentarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre: nombre, texto: texto })
+              })
+                .then(function (r) { return r.json().then(function (d) { return { status: r.status, data: d }; }); })
+                .then(function (res) {
+                  if (res.status === 201) {
+                    nombreInput.value = '';
+                    textoInput.value  = '';
+                    cargarComentarios(formCom.dataset.actividadId, ulCom);
+                  } else {
+                    var errs = res.data.errores || {};
+                    errDiv.textContent = Object.values(errs).join(' ') || 'Error al guardar el comentario.';
+                  }
+                })
+                .catch(function () {
+                  errDiv.textContent = 'No se pudo conectar con el servidor.';
+                })
+                .finally(function () {
+                  btn.disabled = false;
+                });
+            });
           });
         })
         .catch(function () {

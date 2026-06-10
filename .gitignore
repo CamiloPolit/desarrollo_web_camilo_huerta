@@ -1,0 +1,12 @@
+# Entorno virtual Python
+backend/venv/
+
+# Archivos compilados Python
+__pycache__/
+*.py[cod]
+
+# Uploads generados en runtime
+backend/static/uploads/
+
+# macOS
+.DS_Store

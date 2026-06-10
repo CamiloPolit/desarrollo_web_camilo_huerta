@@ -16,5 +16,7 @@ class Actividad(db.Model):
     enlace         = db.Column(db.String(500), nullable=True)
     fecha_registro = db.Column(db.DateTime, nullable=False)
 
-    horarios = db.relationship('Horario', backref='actividad', lazy=True)
-    fotos    = db.relationship('Foto', backref='actividad', lazy=True)
+    horarios    = db.relationship('Horario',    backref='actividad', lazy=True)
+    fotos       = db.relationship('Foto',       backref='actividad', lazy=True)
+    comentarios = db.relationship('Comentario', backref='actividad', lazy=True,
+                                  order_by='Comentario.fecha.desc()')

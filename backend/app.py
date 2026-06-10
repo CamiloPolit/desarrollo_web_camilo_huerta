@@ -3,7 +3,7 @@ from flask import Flask
 from config import Config
 from extensions import db
 import models  # registra todos los modelos con SQLAlchemy
-from routes import geo_bp, miembros_bp, registro_bp
+from routes import geo_bp, miembros_bp, registro_bp, estadisticas_bp, comentarios_bp
 
 
 def create_app(config=Config):
@@ -17,6 +17,8 @@ def create_app(config=Config):
     app.register_blueprint(geo_bp)
     app.register_blueprint(miembros_bp)
     app.register_blueprint(registro_bp)
+    app.register_blueprint(estadisticas_bp)
+    app.register_blueprint(comentarios_bp)
 
     @app.after_request
     def agregar_cors(response):
