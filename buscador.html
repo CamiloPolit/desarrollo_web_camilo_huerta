@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCC Actividades — Buscador</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/lista.css">
+</head>
+<body data-pagina="buscador">
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-title">Área Calidad de Vida DCC</span>
+        <span class="brand-subtitle">Gestión de actividades</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="registro.html">Registrar miembro</a>
+        <a href="actividades.html">Informar actividad</a>
+        <a href="buscador.html" class="activo">Buscador de actividades</a>
+        <a href="miembros.html">Ver miembros</a>
+        <a href="metricas.html">Métricas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido-principal">
+    <section aria-labelledby="titulo-buscador">
+      <h1 class="page-title" id="titulo-buscador">Buscador de actividades</h1>
+
+      <form id="form-buscador" class="campo" autocomplete="off" onsubmit="return false;">
+        <label for="texto-busqueda">
+          Buscar por nombre, descripción o comuna (mínimo 3 caracteres)
+        </label>
+        <input type="text" id="texto-busqueda" name="texto-busqueda"
+               placeholder="Ej: robótica, Santiago, fotografía…">
+      </form>
+
+      <div id="busqueda-error" class="alerta alerta-error" style="display:none;" role="alert"></div>
+      <p id="busqueda-sin-resultados" class="sin-datos" style="display:none;">
+        No se encontraron actividades que coincidan con la búsqueda.
+      </p>
+
+      <ul id="lista-resultados" class="lista-resultados-busqueda"></ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>DCC Actividades &mdash; Área de Calidad de Vida &mdash; Departamento de Ciencias de la Computación</p>
+  </footer>
+
+  <script src="js/buscador.js"></script>
+</body>
+</html>

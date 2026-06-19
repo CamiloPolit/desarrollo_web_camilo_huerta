@@ -421,6 +421,55 @@ tbody td {
   min-height: 1.2em;
 }
 
+/* ── Buscador de actividades (Tarea 4) ───────────────────── */
+
+.lista-resultados-busqueda {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.resultado-busqueda {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.25rem;
+}
+
+.resultado-busqueda mark {
+  background: #fff3b0;
+  color: inherit;
+  padding: 0 0.1em;
+  border-radius: 2px;
+}
+
+.nota-actividad {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--color-border);
+}
+
+.nota-valor {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.nota-conteo {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.btn-evaluar {
+  margin-left: auto;
+}
+
 /* ── Responsivo ──────────────────────────────────────────── */
 
 @media (max-width: 600px) {
